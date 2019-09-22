@@ -1,0 +1,40 @@
+CREATE TABLE body_parts (
+  bid int AUTO_INCREMENT,
+  brand varchar(40) NOT NULL,
+  modeNum varchar(50) NOT NULL,
+  colour char(20) NOT NULL,
+  model varchar(40) NOT NULL,
+  quantity int(11) DEFAULT NULL,
+  CONSTRAINT pk_bodyPart PRIMARY KEY (bid)
+
+
+
+
+
+CREATE TABLE accessrices (
+  ac_id int AUTO_INCREMENT,
+  bid int not null,
+  discript varchar(200) NOT NULL,
+  
+  CONSTRAINT pk_accessrices PRIMARY KEY (ac_id),
+  CONSTRAINT fk_accessrices FOREIGN KEY (bid) REFERENCES body_parts (bid)
+
+
+
+CREATE TABLE alloywheel (
+  a_id int AUTO_INCREMENT,
+  bid int not null,
+  size double NOT NULL,
+  rimMaterial varchar(40) NOT NULL,
+  CONSTRAINT pk_alloyWheel PRIMARY KEY (a_id),
+  CONSTRAINT fk_alloyWheel FOREIGN KEY (bid) REFERENCES body_parts (bid)
+
+
+
+
+CREATE TABLE multimedia (
+  m_id int AUTO_INCREMENT,
+  bid int not null,
+  amphere varchar(40) NOT NULL,
+  CONSTRAINT pk_multimedia PRIMARY KEY (m_id),
+  CONSTRAINT fk_multimedia FOREIGN KEY (bid) REFERENCES body_parts (bid)

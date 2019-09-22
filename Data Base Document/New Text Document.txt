@@ -1,0 +1,283 @@
+CREATE DATABASE shopdb;
+
+
+
+CREATE TABLE login(
+    l_id int AUTO_INCREMENT,
+    uName varchar(50) NOT null,
+    password varchar(10) NOT null,
+    email varchar(40),
+    CONSTRAINT pk_login PRIMARY KEY(l_id)
+    )
+
+
+CREATE TABLE customer(
+
+	cid int AUTO_INCREMENT,
+    NIC CHARACTER(20) not null,
+    phone CHARACTER(15) null,
+    email varchar(40) null,
+    
+    CONSTRAINT pk_customer PRIMARY KEY(cid)
+)
+
+create table discount(
+    
+d_id int AUTO_INCREMENT,
+type varchar(40) not null,
+barcodeId varchar(40) not null,
+rate CHARACTER(20),
+CONSTRAINT pk_discount PRIMARY KEY(d_id)
+    
+    
+
+)
+
+
+ALTER TABLE customer(
+
+	cid int AUTO_INCREMENT,
+    did int ,
+    NIC CHARACTER(20) not null,
+    phone CHARACTER(15) null,
+    email varchar(40) null,
+    
+    CONSTRAINT pk_customer PRIMARY KEY(cid),
+    CONSTRAINT pk_customer FOREIGN KEY(did) REFERENCES discount(d_id)
+)
+
+
+
+
+
+CREATE TABLE vehicle(
+    v_id int AUTO_INCREMENT,
+    brand varchar(40) NOT null,
+    modelYear CHARACTER(10) NOT null,
+    model varchar(25) NOT null,
+    engNum varchar(30) NOT null,
+    engCap varchar(30) NOT null,
+    mileage varchar(30) null,
+    chassisNum varchar(30)NOT null,
+    sPrice REAL NOT null,
+    vImage varchar(40) NOT null,
+    discription varchar(150) null,
+    type CHARACTER(15) NOT null,
+    regNum CHARACTER(15) null,
+    vBoolImg varchar(40) null,
+    c_id int,
+    
+    CONSTRAINT pk_Vehicle PRIMARY KEY(v_id),
+    CONSTRAINT fk_Vehicle FOREIGN KEY(c_id) REFERENCES customer(cid)
+)
+
+
+CREATE TABLE removedVeh(
+
+	rid int AUTO_INCREMENT,
+    v_id int,
+    status CHARACTER(15) NOT null,
+    
+    CONSTRAINT pk_removedVeh PRIMARY KEY(rid),
+    CONSTRAINT fk_removedVeh FOREIGN KEY(v_id) REFERENCES vehicle(v_id)
+    
+    
+)
+
+
+
+CREATE TABLE exchangeVeh(
+	
+    e_id int AUTO_INCREMENT,
+    eBrand varchar(25) NOT null,
+    gBrand varchar(25) NOT null,
+    eModel varchar(25) NOT null,
+    gModel varchar(25) NOT null,
+    exchangeDate CHARACTER(15) NOT null,
+    balance REAL NOT null,
+    ePrice REAL NOT null,
+    gPrice REAL NOT null,
+    eType varchar(25) NOT null,
+    gType varchar(25) NOT null,
+    bool_Image varchar(40),
+    
+     CONSTRAINT pk_exchangeVeh PRIMARY KEY(e_id)
+    
+)
+
+CREATE TABLE sale(
+	sid int AUTO_INCREMENT,
+    brand varchar(40) NOT null,
+    c_id int NOT null,
+    selling_price REAL NOT null,
+    givenPrice REAL NOT null,
+    amount REAL NOT null,
+    profit REAL NOT null,
+    
+    CONSTRAINT pk_sale PRIMARY key(sid)
+)
+CREATE TABLE body_parts(
+	bid int PRIMARY KEY AUTO_INCREMENT,
+    sid int ,
+    modelNum varchar(25) not null,
+    colour CHARACTER(15) NOT null,
+    type CHARACTER(15) not null,
+    quantity int not null,
+    
+   
+    CONSTRAINT fk_body_parts FOREIGN KEY(sid) REFERENCES sale(sid)
+)
+
+
+CREATE TABLE veh_sale(
+
+	vsId int AUTO_INCREMENT,
+    sid int,
+    modelYear varchar(25) NOT null,
+    chassisNum varchar(25) NOT null,
+    regNum CHARACTER(15) null,
+    status CHARACTER(15) NOT null,
+    
+    CONSTRAINT pk_veh_sale PRIMARY KEY(vsId),
+    CONSTRAINT fk_veh_sale FOREIGN KEY(sid) REFERENCES sale(sid)
+)
+
+
+
+CREATE TABLE alloyWhell(
+
+	a_id int AUTO_INCREMENT,
+    bid int,
+    size CHARACTER(15) NOT null,
+    rimMaterial CHARACTER(15) NOT null,
+    
+    CONSTRAINT pk_alloyWhell PRIMARY KEY(a_id),
+    CONSTRAINT fk_alloyWhell FOREIGN KEY(bid) REFERENCES body_parts(bid)
+)
+
+CREATE TABLE multimedea(
+
+	m_id int AUTO_INCREMENT,
+    bid int,
+    amphere CHARACTER(15) NOT null,
+    
+    
+    CONSTRAINT pk_multimedea PRIMARY KEY(m_id),
+    CONSTRAINT fk_multimedea FOREIGN KEY(bid) REFERENCES body_parts(bid)
+)
+
+CREATE TABLE acccessries(
+
+	ac_id int AUTO_INCREMENT,
+    bid int,
+    discrip varchar(150) null,
+    
+    
+    CONSTRAINT pk_acccessries PRIMARY KEY(ac_id),
+    CONSTRAINT fk_acccessries FOREIGN KEY(bid) REFERENCES body_parts(bid)
+)
+
+
+
+----------------- Changes-----------
+
+
+ALTER TABLE vehicle (
+    v_id int AUTO_INCREMENT,
+    brand varchar(40) NOT null,
+    modelYear CHARACTER(10) NOT null,
+    model varchar(25) NOT null,
+    engNum varchar(30) UNIQUE,
+    engCap varchar(30) NOT null,
+    mileage varchar(30) null,
+    chassisNum varchar(30) UNIQUE,
+    sPrice REAL NOT null,
+    vImage varchar(40) NOT null,
+    discription varchar(150) null,
+    type CHARACTER(15) NOT null,
+    regNum CHARACTER(15) null UNIQUE,
+    vBoolImg varchar(40) null,
+    c_id int not null,
+    
+    CONSTRAINT pk_Vehicle PRIMARY KEY(v_id),
+    CONSTRAINT fk_Vehicle FOREIGN KEY(c_id) REFERENCES customer(cid)
+)
+
+
+// body parts model and brand
+
+create table BodyPartBrand(
+
+	bid int auto_increment,
+	brandName varchar(40) not null,
+	CONSTRAINT pk_BodyPartBrand PRIMARY KEY(bid)
+);
+
+create table bodyModel(
+
+m_id int AUTO_INCREMENT,
+bid int not null,
+mName varchar(40) NOT null,
+CONSTRAINT pk_bodyModel PRIMARY KEY(m_id),
+CONSTRAINT fk_bodyModel FOREIGN KEY(bid) REFERENCES BodyPartBrand(bid)
+)
+
+CREATE TABLE remove_bodyparts(
+	rbid int AUTO_INCREMENT,
+    brand varchar(40) not null,
+    modeNum varchar(40) not null,
+    model varchar(40) not null,
+    status varchar(40) not null,
+    price varchar(40) not null,
+    size varchar(40) null,
+    rimMaterial varchar(40) null,
+    discript varchar(300) null,
+    amphere varchar(40) null,
+    hrtz CHARACTER(20) null,
+    CONSTRAINT pk_removeBodyParts PRIMARY KEY(rbid)
+    
+    
+)
+
+
+CREATE TABLE bodypratSelling (
+    brand varchar(60) not null,
+    model varchar(70) NOT NULL,
+    id int NOT NULL,
+	cash double NOT NULL,
+	subtotal double NOT NULL,
+	balance double NOT NULL,
+	quantity double NOT NULL,
+	total double NOT NULL, 
+    PRIMARY KEY (id),
+    FOREIGN KEY (cusid) REFERENCES customer(cid)
+);
+
+CREATE TABLE sale_discription(
+
+s_id int AUTO_INCREMENT,
+customer_id int not null,
+sale_id int not null,
+date varchar(40) not null,
+    
+    CONSTRAINT pk_sale_discription PRIMARY KEY(s_id),
+    CONSTRAINT fk_customer FOREIGN KEY(customer_id) REFERENCES customer(cid),
+    CONSTRAINT fk_selling FOREIGN KEY(sale_id) REFERENCES bodypratselling(id)
+
+)
+
+
+CREATE TABLE body_parts_order(
+
+    o_id int AUTO_INCREMENT,
+    body_parts_bid int NOT null,
+    o_brand varchar(40) not null,
+    o_model varchar(40) not null,
+    o_qnt int not null,
+    home_status int NOT null,
+    o_customer_id int NOT null,
+    CONSTRAINT pk_order PRIMARY KEY(o_id),
+    CONSTRAINT fk_order FOREIGN KEY(body_parts_bid) REFERENCES body_parts(bid)
+    
+
+)
